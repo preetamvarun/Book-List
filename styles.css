@@ -46,3 +46,7 @@ body{
 .failure{
     background-color : red;
 }
+
+.red:hover{
+    cursor: pointer;
+}

@@ -1,4 +1,5 @@
 const addBook = document.getElementById('submit');
+const tbody = document.querySelector('tbody');
 
 /* CREATE A BOOK CONSTRUCTOR */
 function Book(title,author,isbn){
@@ -17,7 +18,8 @@ userInterface.prototype.addBook = function(){
     rowElement.innerHTML = 
     `<td>${this.bookObject.title}</td> 
     <td>${this.bookObject.author}</td> 
-    <td>${this.bookObject.isbn}</td>`;
+    <td>${this.bookObject.isbn}</td>
+    <td><strong class = 'red'; style = "color : red";>X</strong></td>`;
     const tbody = document.querySelector('tbody');
     tbody.appendChild(rowElement);
 }
@@ -29,17 +31,25 @@ userInterface.prototype.checkStatus = function(){
     return status;
 }
 
-userInterface.prototype.resultBoard = function(msg,bookStatus){
+userInterface.prototype.resultBoard = function(bookStatus,msg){
     const divElement = document.createElement('div');
     divElement.className = 'alert';
     const mainBox = document.getElementById('mainBox');
-    msg === 'green' ? divElement.classList.add('success') : 
+    bookStatus === 'green' ? divElement.classList.add('success') : 
     divElement.classList.add('failure');
-    msg === 'green' ? divElement.textContent = `${bookStatus}` : divElement.textContent = `${bookStatus}`;
+    bookStatus === 'green' ? divElement.textContent = `${msg}` : divElement.textContent = `${msg}`;
     mainBox.prepend(divElement);
+    // making the element disappear after 1.5s
     setTimeout(function(){
-        document.querySelector('.alert').remove()
-    }, 2000)
+        document.querySelector('.alert').remove();
+    }, 1500);
+}
+
+userInterface.prototype.removeBook = function(e){
+    if (e.target.className === 'red'){
+        const tableRow = e.target.parentElement.parentElement;   
+        tableRow.remove();
+    }
 }
 
 addBook.addEventListener('click', function(){
@@ -48,20 +58,43 @@ addBook.addEventListener('click', function(){
     const bookAuthor = document.getElementById('author');
     const isbn = document.getElementById('isbn');
     let message = '';
-    // create a instance of book
+
+    // create an instance of the book
     const newBook = new Book(bookTitle.value,bookAuthor.value,isbn.value);
+
+    // create an instance of the ui
     const ui = new userInterface(newBook);
+
+    // check the field status 
     if(ui.checkStatus()){
-        message = 'green';
+       bookStatus = 'green';
         ui.addBook();
-        bookStatus = 'Book Added';
+        message = 'Book Added';
     } else{
-        message = 'red';
-        bookStatus = 'Failed to add';
+        bookStatus = 'red';
+        message = 'please fill in all the details of the book';
     }
-    ui.resultBoard(message,bookStatus);
+
+    // display result board
+    ui.resultBoard(bookStatus,message);
+
     // clear the input fields 
     bookTitle.value = ''; 
     bookAuthor.value = '';
     isbn.value = '';
 });
+
+
+// Event listener for deleting a book
+tbody.addEventListener('click', function(e){
+
+    // Instantiate the UI
+    const  ui = new userInterface();
+   
+    // now remove the book 
+    ui.removeBook(e);
+    ui.resultBoard('removed','book removed');
+})
+
+
+
