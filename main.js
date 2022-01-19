@@ -1,7 +1,5 @@
 const addBook = document.getElementById('submit');
 
-// Create two constructors one for the books and other for the UI
-
 /* CREATE A BOOK CONSTRUCTOR */
 function Book(title,author,isbn){
     this.title = title;
@@ -31,18 +29,37 @@ userInterface.prototype.checkStatus = function(){
     return status;
 }
 
+userInterface.prototype.resultBoard = function(msg,bookStatus){
+    const divElement = document.createElement('div');
+    divElement.className = 'alert';
+    const mainBox = document.getElementById('mainBox');
+    msg === 'green' ? divElement.classList.add('success') : 
+    divElement.classList.add('failure');
+    msg === 'green' ? divElement.textContent = `${bookStatus}` : divElement.textContent = `${bookStatus}`;
+    mainBox.prepend(divElement);
+    setTimeout(function(){
+        document.querySelector('.alert').remove()
+    }, 2000)
+}
+
 addBook.addEventListener('click', function(){
     // Get the input field values first 
     const bookTitle = document.getElementById('title')
     const bookAuthor = document.getElementById('author');
     const isbn = document.getElementById('isbn');
-
+    let message = '';
     // create a instance of book
     const newBook = new Book(bookTitle.value,bookAuthor.value,isbn.value);
     const ui = new userInterface(newBook);
-
-
-    ui.checkStatus() ? ui.addBook() : console.log('please fill up all the details');
+    if(ui.checkStatus()){
+        message = 'green';
+        ui.addBook();
+        bookStatus = 'Book Added';
+    } else{
+        message = 'red';
+        bookStatus = 'Failed to add';
+    }
+    ui.resultBoard(message,bookStatus);
     // clear the input fields 
     bookTitle.value = ''; 
     bookAuthor.value = '';

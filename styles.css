@@ -29,3 +29,20 @@ body{
     margin-top : 1.5rem;
     background-color : rgba(128, 128, 128, 0.26);
 }
+
+.success,.failure{
+    height : 30px;
+    max-width : 980px;
+    margin : 1rem auto 0rem auto;
+    text-align: center;
+    color : white;
+    padding : 0.35rem;
+}
+
+.success{
+    background-color : green;
+}
+
+.failure{
+    background-color : red;
+}
