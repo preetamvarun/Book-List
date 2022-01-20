@@ -75,7 +75,7 @@ userInterface.prototype.removeBook = function(e){
         
         // Declare the arrays 
         let books,authors,isbns;
-        
+
         // GET ALL THE ARRAYS FROM THE LOCAL STORAGE 
         localStorage.getItem('bookNames') === null ? 
         books = [] : books = JSON.parse(localStorage.getItem('bookNames'));
@@ -99,6 +99,27 @@ userInterface.prototype.removeBook = function(e){
     }
 }
 
+userInterface.prototype.updateEntireUI = function(){
+    let books,authors,isbns;
+    localStorage.getItem('bookNames') === null ? 
+    books = [] : books = JSON.parse(localStorage.getItem('bookNames'));
+    localStorage.getItem('authorNames') === null ? 
+    authors = [] : authors = JSON.parse(localStorage.getItem('authorNames'));
+    localStorage.getItem('isbnNumbers') === null ? 
+    isbns = [] : isbns = JSON.parse(localStorage.getItem('isbnNumbers'));
+    for(let i = 0; i < books.length; i++){
+        const rowElement = document.createElement('tr');
+        rowElement.innerHTML = 
+        `<td>${books[i]}</td> 
+        <td>${authors[i]}</td> 
+        <td>${isbns[i]}</td>
+        <td><strong class = 'red'; style = "color : red";>X</strong></td>`;
+        const tbody = document.querySelector('tbody');
+        tbody.appendChild(rowElement);
+    }
+}
+
+// Event listener for adding a book
 addBook.addEventListener('click', function(){
     // Get the input field values first 
     const bookTitle = document.getElementById('title')
@@ -141,7 +162,9 @@ tbody.addEventListener('click', function(e){
     ui.resultBoard('removed','book removed');
 });
 
+// Event Listener when the site reloads
 
-
-
-
+document.addEventListener('DOMContentLoaded',function(){
+    const ui = new userInterface();
+    ui.updateEntireUI();
+});
