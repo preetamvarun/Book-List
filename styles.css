@@ -49,3 +49,16 @@ body{
 .red:hover{
     cursor: pointer;
 }
+
+table{
+    border-collapse: collapse;
+}
+
+th, td {
+    border-bottom: 1px solid #ddd;
+    padding: 0.65rem;
+}
+
+tr:hover{
+    background-color: gainsboro;
+}
