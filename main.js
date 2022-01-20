@@ -42,7 +42,7 @@ userInterface.prototype.resultBoard = function(bookStatus,msg){
     // making the element disappear after 1.5s
     setTimeout(function(){
         document.querySelector('.alert').remove();
-    }, 1500);
+    }, 2000);
 }
 
 userInterface.prototype.removeBook = function(e){
@@ -87,14 +87,14 @@ addBook.addEventListener('click', function(){
 
 // Event listener for deleting a book
 tbody.addEventListener('click', function(e){
-
     // Instantiate the UI
     const  ui = new userInterface();
-   
     // now remove the book 
     ui.removeBook(e);
     ui.resultBoard('removed','book removed');
-})
+});
+
+
 
 
 

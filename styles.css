@@ -27,7 +27,6 @@ body{
 .table{
     width : 100%;
     margin-top : 1.5rem;
-    background-color : rgba(128, 128, 128, 0.26);
 }
 
 .success,.failure{
