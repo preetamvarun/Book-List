@@ -1,20 +1,21 @@
 const addBook = document.getElementById('submit');
 const tbody = document.querySelector('tbody');
 
-/* CREATE A BOOK CONSTRUCTOR */
-function Book(title,author,isbn){
-    this.title = title;
-    this.author = author;
-    this.isbn = isbn;
+/* CREATING A BOOK CONSTRUCTOR USING ES6*/
+class Book{
+    constructor(title,author,isbn){
+        this.title = title;
+        this.author = author;
+        this.isbn = isbn;
+    }
 }
 
-/* CREATE A UI CONSTRUCTOR */
-function userInterface(bookObject){
-    this.bookObject = bookObject;
-}
-
-userInterface.prototype.addBook = function(){
-
+/* CREATE A UI CONSTRUCTOR USING ES6*/
+class userInterface{
+    constructor(bookObject){
+        this.bookObject = bookObject;
+    }
+    addBook(){
     // Add this book to the local storage 
     let books,authors,isbns;
 
@@ -45,77 +46,75 @@ userInterface.prototype.addBook = function(){
     <td><strong class = 'red'; style = "color : red";>X</strong></td>`;
     const tbody = document.querySelector('tbody');
     tbody.appendChild(rowElement);
-}
-
-userInterface.prototype.checkStatus = function(){
-    let status = false;
-    (this.bookObject.title === '' || this.bookObject.author === '' || this.bookObject.isbn === '') ?
-    status = false : status = true;
-    return status;
-}
-
-userInterface.prototype.resultBoard = function(bookStatus,msg){
-    const divElement = document.createElement('div');
-    divElement.className = 'alert';
-    const mainBox = document.getElementById('mainBox');
-    bookStatus === 'green' ? divElement.classList.add('success') : 
-    divElement.classList.add('failure');
-    bookStatus === 'green' ? divElement.textContent = `${msg}` : divElement.textContent = `${msg}`;
-    mainBox.prepend(divElement);
-    // making the element disappear after 1.5s
-    setTimeout(function(){
-        document.querySelector('.alert').remove();
-    }, 2000);
-}
-
-userInterface.prototype.removeBook = function(e){
-    if (e.target.className === 'red'){
-        const tableRow = e.target.parentElement.parentElement;   
-        const bookTitle = e.target.parentElement.parentElement.firstElementChild.textContent;
+    }
+    checkStatus(){
+        let status = false;
+        (this.bookObject.title === '' || this.bookObject.author === '' || this.bookObject.isbn === '') ?
+        status = false : status = true;
+        return status;
+    }
+    resultBoard(bookStatus,msg){
+        const divElement = document.createElement('div');
+        divElement.className = 'alert';
+        const mainBox = document.getElementById('mainBox');
+        bookStatus === 'green' ? divElement.classList.add('success') : 
+        divElement.classList.add('failure');
+        bookStatus === 'green' ? divElement.textContent = `${msg}` : divElement.textContent = `${msg}`;
+        mainBox.prepend(divElement);
+        // making the element disappear after 1.5s
+        setTimeout(function(){
+            document.querySelector('.alert').remove();
+        }, 2000);
+    }
+    removeBook(e){
+        if (e.target.className === 'red'){
+            const tableRow = e.target.parentElement.parentElement;   
+            const bookTitle = e.target.parentElement.parentElement.firstElementChild.textContent;
+            
+            // Declare the arrays 
+            let books,authors,isbns;
+    
+            // GET ALL THE ARRAYS FROM THE LOCAL STORAGE 
+            localStorage.getItem('bookNames') === null ? 
+            books = [] : books = JSON.parse(localStorage.getItem('bookNames'));
         
-        // Declare the arrays 
-        let books,authors,isbns;
+            localStorage.getItem('authorNames') === null ? 
+            authors = [] : authors = JSON.parse(localStorage.getItem('authorNames'));
+        
+            localStorage.getItem('isbnNumbers') === null ? 
+            isbns = [] : isbns = JSON.parse(localStorage.getItem('isbnNumbers'));
 
-        // GET ALL THE ARRAYS FROM THE LOCAL STORAGE 
+            let index;
+            index = books.indexOf(bookTitle);
+            books.splice(index,1);
+            authors.splice(index,1);
+            isbns.splice(index,1);
+    
+            localStorage.setItem('bookNames',JSON.stringify(books));
+            localStorage.setItem('authorNames',JSON.stringify(authors));
+            localStorage.setItem('isbnNumbers',JSON.stringify(isbns));
+    
+            tableRow.remove();
+        }
+    }
+    updateEntireUI(){
+        let books,authors,isbns;
         localStorage.getItem('bookNames') === null ? 
         books = [] : books = JSON.parse(localStorage.getItem('bookNames'));
-    
         localStorage.getItem('authorNames') === null ? 
         authors = [] : authors = JSON.parse(localStorage.getItem('authorNames'));
-    
         localStorage.getItem('isbnNumbers') === null ? 
         isbns = [] : isbns = JSON.parse(localStorage.getItem('isbnNumbers'));
-
-        index = books.indexOf(bookTitle);
-        books.splice(index,1);
-        authors.splice(index,1);
-        isbns.splice(index,1);
-
-        localStorage.setItem('bookNames',JSON.stringify(books));
-        localStorage.setItem('authorNames',JSON.stringify(authors));
-        localStorage.setItem('isbnNumbers',JSON.stringify(isbns));
-
-        tableRow.remove();
-    }
-}
-
-userInterface.prototype.updateEntireUI = function(){
-    let books,authors,isbns;
-    localStorage.getItem('bookNames') === null ? 
-    books = [] : books = JSON.parse(localStorage.getItem('bookNames'));
-    localStorage.getItem('authorNames') === null ? 
-    authors = [] : authors = JSON.parse(localStorage.getItem('authorNames'));
-    localStorage.getItem('isbnNumbers') === null ? 
-    isbns = [] : isbns = JSON.parse(localStorage.getItem('isbnNumbers'));
-    for(let i = 0; i < books.length; i++){
-        const rowElement = document.createElement('tr');
-        rowElement.innerHTML = 
-        `<td>${books[i]}</td> 
-        <td>${authors[i]}</td> 
-        <td>${isbns[i]}</td>
-        <td><strong class = 'red'; style = "color : red";>X</strong></td>`;
-        const tbody = document.querySelector('tbody');
-        tbody.appendChild(rowElement);
+        for(let i = 0; i < books.length; i++){
+            const rowElement = document.createElement('tr');
+            rowElement.innerHTML = 
+            `<td>${books[i]}</td> 
+            <td>${authors[i]}</td> 
+            <td>${isbns[i]}</td>
+            <td><strong class = 'red'; style = "color : red";>X</strong></td>`;
+            const tbody = document.querySelector('tbody');
+            tbody.appendChild(rowElement);
+        }
     }
 }
 
