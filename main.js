@@ -14,6 +14,29 @@ function userInterface(bookObject){
 }
 
 userInterface.prototype.addBook = function(){
+
+    // Add this book to the local storage 
+    let books,authors,isbns;
+
+    // Get the arrays from the local storage
+    localStorage.getItem('bookNames') === null ? 
+    books = [] : books = JSON.parse(localStorage.getItem('bookNames'));
+
+    localStorage.getItem('authorNames') === null ? 
+    authors = [] : authors = JSON.parse(localStorage.getItem('authorNames'));
+
+    localStorage.getItem('isbnNumbers') === null ? 
+    isbns = [] : isbns = JSON.parse(localStorage.getItem('isbnNumbers'));
+
+    books.push(this.bookObject.title);
+    authors.push(this.bookObject.author);
+    isbns.push(this.bookObject.isbn);
+
+    // Set the arrays to the local storage
+    localStorage.setItem('bookNames',JSON.stringify(books));
+    localStorage.setItem('authorNames',JSON.stringify(authors));
+    localStorage.setItem('isbnNumbers',JSON.stringify(isbns));
+
     const rowElement = document.createElement('tr');
     rowElement.innerHTML = 
     `<td>${this.bookObject.title}</td> 
