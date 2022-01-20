@@ -71,6 +71,30 @@ userInterface.prototype.resultBoard = function(bookStatus,msg){
 userInterface.prototype.removeBook = function(e){
     if (e.target.className === 'red'){
         const tableRow = e.target.parentElement.parentElement;   
+        const bookTitle = e.target.parentElement.parentElement.firstElementChild.textContent;
+        
+        // Declare the arrays 
+        let books,authors,isbns;
+        
+        // GET ALL THE ARRAYS FROM THE LOCAL STORAGE 
+        localStorage.getItem('bookNames') === null ? 
+        books = [] : books = JSON.parse(localStorage.getItem('bookNames'));
+    
+        localStorage.getItem('authorNames') === null ? 
+        authors = [] : authors = JSON.parse(localStorage.getItem('authorNames'));
+    
+        localStorage.getItem('isbnNumbers') === null ? 
+        isbns = [] : isbns = JSON.parse(localStorage.getItem('isbnNumbers'));
+
+        index = books.indexOf(bookTitle);
+        books.splice(index,1);
+        authors.splice(index,1);
+        isbns.splice(index,1);
+
+        localStorage.setItem('bookNames',JSON.stringify(books));
+        localStorage.setItem('authorNames',JSON.stringify(authors));
+        localStorage.setItem('isbnNumbers',JSON.stringify(isbns));
+
         tableRow.remove();
     }
 }
